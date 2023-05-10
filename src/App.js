@@ -1,19 +1,33 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css';
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import TodoForm from "./Components/TodoForm";
 import TodoList from "./Components/TodoList";
 
 function App() {
-  const [todoList, setTodoList] = useState([])
-
+  const [todoList, setTodoList] = useState(JSON.parse(localStorage.getItem('todoList')) || [])
   const addTodo = (todo) => {
     setTodoList([...todoList, todo])
   }
-
-  const deleteTodo = (todo) => {
-    setTodoList(todoList.filter(t => t.name !== todo.name))
+  const toggleCompletion = (index) => {
+    const updatedTodoList = todoList.map( (todo, i) => {
+      if(index === i) {
+        const updatedTodo = {...todo, completed: !todo.completed}
+        return updatedTodo
+      }
+      return todo
+    })
+    setTodoList(updatedTodoList)
   }
+  
+
+  const deleteTodo = (delIndex) => {
+    setTodoList(todoList.filter((t,i) => i !== delIndex))
+  }
+  
+  useEffect(() => {
+    localStorage.setItem('todoList', JSON.stringify(todoList))
+})
 
   return (
     <div className="container mt-4">
@@ -24,7 +38,7 @@ function App() {
       </div>
       <div className="row">
         <div className="col">
-          <TodoList todoList={ todoList } deleteTodo={ deleteTodo }/>
+          <TodoList todoList={ todoList } deleteTodo={ deleteTodo } toggleCompletion={ toggleCompletion }/>
         </div>
       </div>
     </div>

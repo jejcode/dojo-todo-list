@@ -1,28 +1,18 @@
 import React from "react";
+import styles from './TodoList.module.css'
 
 const TodoList = (props) => {
-    const {todoList, deleteTodo} = props
-    
-    const toggleCompletion = (condition, index) => {
-        todoList[index].completed = condition
-        condition ?
-        document.getElementById(`todo${index}`).style.textDecoration = 'line-through'
-        : document.getElementById(`todo${index}`).style.textDecoration = 'none'
-        
-
-    }
-
+    const {todoList, deleteTodo, toggleCompletion} = props
     return (
-        <ul>
-            {todoList.map((todo,index) => 
-                <li key={ index } className="mb-4 d-flex align-items-center">
-                    <span id={`todo${index}`}>{todo.name}</span>
-                    <input type="checkbox" className="form-check-input mx-3" onClick={ (e) => toggleCompletion(e.target.checked, index) } />
-                    <button className="btn btn-warning" onClick={() => {deleteTodo(todo)}}>Delete</button>
-                </li>
-            )}
-
-        </ul>
+        todoList.map((todo, index) => {
+            return (
+                <div key={index} className="mb-2 d-flex align-items-center">
+                    <span className={todo.completed ? styles.completed : styles.incomplete}>{todo.name}</span>
+                    <input type="checkbox" className="form-check-input mx-3" onChange={ (e) => toggleCompletion(index)} checked={todo.completed}/>
+                    <button className="btn btn-warning" onClick={() => {deleteTodo(index)}}>Delete</button>
+                </div>
+            )
+        })
     )
 }
 

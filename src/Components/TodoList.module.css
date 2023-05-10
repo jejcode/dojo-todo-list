@@ -1,0 +1,8 @@
+.completed {
+    text-decoration: line-through;
+    color: #dddddd;
+}
+
+.incomplete {
+    text-decoration: none;
+}
